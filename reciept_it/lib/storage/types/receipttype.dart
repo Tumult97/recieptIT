@@ -1,4 +1,4 @@
-enum RecieptType{
+enum ReceiptType{
   grocery,
   petrol,
   game,

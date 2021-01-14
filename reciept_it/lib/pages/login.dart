@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reciept_it/components/bordered_transparent_input.dart';
+import 'package:reciept_it/storage/logic/connection.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,12 +13,13 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    Connection.OpenDatabase();
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topRight,
-              colors: [Color.fromRGBO(11, 35, 41, 1), Color.fromRGBO(22, 70, 82, 1)]
+              colors: [Color.fromRGBO(11, 35, 41, 1), Color.fromRGBO(22, 70, 82, 1)],
           )
       ),
       child: Scaffold(
@@ -114,6 +116,6 @@ class _LoginState extends State<Login> {
   }
 
   void login(BuildContext context) {
-
+    Navigator.pushReplacementNamed(context, "");
   }
 }
