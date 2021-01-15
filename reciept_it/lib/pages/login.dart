@@ -13,7 +13,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    Connection.OpenDatabase();
+    //Connection.OpenDatabase();
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -96,7 +96,7 @@ class _LoginState extends State<Login> {
                             color: Colors.white54
                           ),
                           onPressed: () {
-                            /*...*/
+                            login(context);
                           },
                           child: Text(
                             "LOGIN",
@@ -116,6 +116,6 @@ class _LoginState extends State<Login> {
   }
 
   void login(BuildContext context) {
-    Navigator.pushReplacementNamed(context, "");
+    Navigator.pushReplacementNamed(context, "/ReceiptsList");
   }
 }

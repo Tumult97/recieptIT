@@ -3,5 +3,6 @@ enum ReceiptType{
   petrol,
   game,
   utility,
+  hygiene,
   other
 }

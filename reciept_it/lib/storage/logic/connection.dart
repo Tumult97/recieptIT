@@ -25,7 +25,7 @@ class Connection{
   //region [ Receipts ]
 
   //insert Receipt
-  Future<void> insertReceipt(Receipt item) async{
+  static Future<void> insertReceipt(Receipt item) async{
     Database database = await db;
 
     database.insert(
@@ -36,7 +36,7 @@ class Connection{
   }
 
   //list Receipts
-  Future<List<Receipt>> listReceipt() async{
+  static Future<List<Receipt>> listReceipt() async{
     final database = await db;
 
     final List<Map<String, dynamic>> maps = await database.query('receipts');
@@ -57,7 +57,7 @@ class Connection{
   }
 
   //update Receipt
-  Future<void> updateReceipt(Receipt item) async{
+  static Future<void> updateReceipt(Receipt item) async{
     final Database database = await db;
 
     await database.update(
@@ -69,7 +69,7 @@ class Connection{
   }
 
   //delete Receipt
-  Future<void> deleteReceipt(int id) async{
+  static Future<void> deleteReceipt(int id) async{
     final Database database = await db;
 
     await database.delete(
@@ -79,7 +79,7 @@ class Connection{
     );
   }
 
-  Future<Receipt> getReceipt(int id) async{
+  static Future<Receipt> getReceipt(int id) async{
     final Database database = await db;
 
     List<Map<String, dynamic>> maps = await database.query(

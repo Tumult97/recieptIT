@@ -1,3 +1,5 @@
+import 'package:reciept_it/storage/types/receipttype.dart';
+
 class Receipt {
   final int id;
   final String title;
@@ -8,8 +10,9 @@ class Receipt {
   final double amount;
   final String comments;
   final int fileId;
+  final ReceiptType type;
 
-  Receipt({this.id, this.title, this.description, this.dateAdded, this.dateModified, this.dateOfReceipt, this.amount, this.comments, this.fileId});
+  Receipt({this.type, this.id, this.title, this.description, this.dateAdded, this.dateModified, this.dateOfReceipt, this.amount, this.comments, this.fileId});
 
   Map<String, dynamic> toMap(){
     return {
@@ -22,6 +25,7 @@ class Receipt {
       'amount': amount,
       'comments': comments,
       'fileId': fileId,
+      'type': type,
     };
   }
 }
