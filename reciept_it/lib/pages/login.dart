@@ -117,5 +117,6 @@ class _LoginState extends State<Login> {
 
   void login(BuildContext context) {
     Navigator.pushReplacementNamed(context, "/ReceiptsList");
+    //Navigator.pushReplacementNamed(context, "/Test");
   }
 }

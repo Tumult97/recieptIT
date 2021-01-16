@@ -1,37 +1,81 @@
 import 'package:path/path.dart';
 import 'package:reciept_it/storage/models/receipt.dart';
+import 'package:reciept_it/storage/types/receipttype.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
 
 class Connection{
-  static Future<Database> db;
+  static Database db;
 
-  static void OpenDatabase() async{
-    db = openDatabase(
+  static void initDb() async{
+    
+    await deleteDatabase(join(await getDatabasesPath(), "database.db"));
+    db = await openDatabase(
       join(await getDatabasesPath(), "database.db"),
+      version: 1,
       onCreate: (db, version){
-        var sql = "CREATE TABLE receipts (id INTEGER PRIMARY KEY, title TEXT, description TEXT, dateAdded DATETIME, dateModified DATETIME, dateOfReceipt DATETIME, amount REAL, comments TEXT, fileId INTEGER)";
+        var sql = "CREATE TABLE receipts (id INTEGER PRIMARY KEY, title TEXT, description TEXT, dateAdded TEXT, dateModified TEXT, dateOfReceipt TEXT, amount REAL, comments TEXT, fileId INTEGER, type TEXT)";
         db.execute(sql);
+
+        //sql = "ALTER TABLE receipts ADD COLUMN type TEXT";
 
         sql = "CREATE TABLE files (id INTEGER PRIMARY KEY, bytes BLOB, dateAdded DATETIME, fileName DATETIME)";
         db.execute(sql);
 
-        return;
+        //return;
       }
     );
+
+    Connection.insertReceipt(Receipt(
+      id: 1,
+      title: "Title 1",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+      dateAdded: DateTime.now(),
+      dateModified: DateTime.now(),
+      dateOfReceipt: DateTime.now(),
+      amount: 243.79,
+      comments: "Pick n' Pay",
+      type: ReceiptType.grocery,
+    ));
+    // Connection.insertReceipt(Receipt(
+    //   id: 1,
+    //   title: "Title 2",
+    //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+    //   dateAdded: DateTime.now(),
+    //   dateModified: DateTime.now(),
+    //   dateOfReceipt: DateTime.now().add(Duration(
+    //       days: -3
+    //   )),
+    //   amount: 300.00,
+    //   comments: "Sasol",
+    //   type: ReceiptType.petrol,
+    // ));
+    // Connection.insertReceipt(Receipt(
+    //   id: 1,
+    //   title: "Title 3",
+    //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+    //   dateAdded: DateTime.now(),
+    //   dateModified: DateTime.now(),
+    //   dateOfReceipt: DateTime.now().add(Duration(
+    //       days: -30,
+    //       seconds: -50000
+    //   )),
+    //   amount: 700.00,
+    //   comments: "Steam",
+    //   type: ReceiptType.game,
+    // ));
   }
 
   //region [ Receipts ]
 
   //insert Receipt
   static Future<void> insertReceipt(Receipt item) async{
-    Database database = await db;
+    Database database = db;
 
     database.insert(
       'receipts',
-      item.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      item.toMap()
     );
   }
 
@@ -46,9 +90,9 @@ class Connection{
         id: maps[i]['id'],
         title: maps[i]['title'],
         description: maps[i]['description'],
-        dateAdded: maps[i]['dateAdded'],
-        dateModified: maps[i]['dateModified'],
-        dateOfReceipt: maps[i]['dateOfReceipt'],
+        dateAdded: DateTime.parse(maps[i]['dateAdded']),
+        dateModified: DateTime.parse(maps[i]['dateModified']),
+        dateOfReceipt: DateTime.parse(maps[i]['dateOfReceipt']),
         amount: maps[i]['amount'],
         comments: maps[i]['comments'],
         fileId: maps[i]['fileId'],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:reciept_it/components/receipt_card.dart';
 import 'package:reciept_it/storage/logic/connection.dart';
 import 'package:reciept_it/storage/models/receipt.dart';
-import 'package:reciept_it/storage/types/filetype.dart';
 import 'package:reciept_it/storage/types/receipttype.dart';
 
 class ReceiptsList extends StatefulWidget {
@@ -11,6 +12,8 @@ class ReceiptsList extends StatefulWidget {
 
 class _ReceiptsListState extends State<ReceiptsList> {
   List<Receipt> response;
+  List<Receipt> selectedList = new List<Receipt>();
+  DateFormat dtFormat = new DateFormat("EEE, MMM d yyyy");
 
   @override
   Widget build(BuildContext context) {
@@ -66,89 +69,70 @@ class _ReceiptsListState extends State<ReceiptsList> {
     //     },
     //   ),
     // );
-
+    Connection.initDb();
     response = new List();
-    response.add(Receipt(
-      id: 1,
-      title: "Title 1",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
-      dateAdded: DateTime.now(),
-      dateModified: DateTime.now(),
-      dateOfReceipt: DateTime.now(),
-      amount: 243.79,
-      comments: "Pick n' Pay",
-      type: ReceiptType.grocery,
-    ));
-    response.add(Receipt(
-      id: 1,
-      title: "Title 2",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
-      dateAdded: DateTime.now(),
-      dateModified: DateTime.now(),
-      dateOfReceipt: DateTime.now().add(Duration(
-          days: -3
-      )),
-      amount: 300.00,
-      comments: "Sasol",
-      type: ReceiptType.petrol,
-    ));
-    response.add(Receipt(
-      id: 1,
-      title: "Title 3",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
-      dateAdded: DateTime.now(),
-      dateModified: DateTime.now(),
-      dateOfReceipt: DateTime.now().add(Duration(
-        days: -30,
-        seconds: -50000
-      )),
-      amount: 700.00,
-      comments: "Steam",
-      type: ReceiptType.game,
-    ));
+    // Connection.insertReceipt(Receipt(
+    //   id: 1,
+    //   title: "Title 1",
+    //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+    //   dateAdded: DateTime.now(),
+    //   dateModified: DateTime.now(),
+    //   dateOfReceipt: DateTime.now(),
+    //   amount: 243.79,
+    //   comments: "Pick n' Pay",
+    //   type: ReceiptType.grocery,
+    // ));
+    // Connection.insertReceipt(Receipt(
+    //   id: 1,
+    //   title: "Title 2",
+    //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+    //   dateAdded: DateTime.now(),
+    //   dateModified: DateTime.now(),
+    //   dateOfReceipt: DateTime.now().add(Duration(
+    //       days: -3
+    //   )),
+    //   amount: 300.00,
+    //   comments: "Sasol",
+    //   type: ReceiptType.petrol,
+    // ));
+    // Connection.insertReceipt(Receipt(
+    //   id: 1,
+    //   title: "Title 3",
+    //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+    //   dateAdded: DateTime.now(),
+    //   dateModified: DateTime.now(),
+    //   dateOfReceipt: DateTime.now().add(Duration(
+    //       days: -30,
+    //       seconds: -50000
+    //   )),
+    //   amount: 700.00,
+    //   comments: "Steam",
+    //   type: ReceiptType.game,
+    // ));
 
-    return ListView.builder(
-      itemCount: response.length,
-      itemBuilder: (context, index){
-        IconData icon;
+    // var list = Connection.listReceipt();
 
-        switch(response[index].type){
-          case ReceiptType.game:
-            icon = Icons.videogame_asset_outlined;
-            break;
-          case ReceiptType.grocery:
-            icon = Icons.shopping_basket_outlined;
-            break;
-          case ReceiptType.hygiene:
-            icon = Icons.soap_outlined;
-            break;
-          case ReceiptType.petrol:
-            icon = Icons.directions_car_outlined;
-            break;
-          case ReceiptType.utility:
-            icon = Icons.settings_applications;
-            break;
-          default:
-            icon = Icons.money;
-            break;
-        }
-
-        return Container(
-          padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-          height: 120,
-          width: double.maxFinite,
-          child: Card(
-            elevation: 5,
-            child: Container(
-              child: Row(crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(icon),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: Text("Receipts"),
+      //   backgroundColor: Color.fromRGBO(21, 69, 81, 1),
+      // ),
+      backgroundColor: Color.fromRGBO(11, 35, 41, 1),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Color.fromRGBO(96, 148, 163, 1),
+        onPressed: () async {
+          var list = await Connection.listReceipt();
+          print(list.length);
+          print(list[0].toMap());
+        },
+      ),
+      body: ListView.builder(
+        itemCount: response.length,
+        itemBuilder: (context, index){
+          return ReceiptCard(receipt: response[index],);
+        },
+      ),
     );
   }
 }

@@ -19,13 +19,13 @@ class Receipt {
       'id': id,
       'title': title,
       'description': description,
-      'dateAdded': dateAdded,
-      'dateModified': dateModified,
-      'dateOfReceipt': dateOfReceipt,
+      'dateAdded': dateAdded.toString(),
+      'dateModified': dateModified.toString(),
+      'dateOfReceipt': dateOfReceipt.toString(),
       'amount': amount,
       'comments': comments,
       'fileId': fileId,
-      'type': type,
+      'type': type.toString(),
     };
   }
 }
