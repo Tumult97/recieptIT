@@ -34,80 +34,85 @@ class ReceiptCard extends StatelessWidget {
         icon = Icons.money;
         break;
     }
-    return Container(
-      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-      height: 120,
-      width: double.maxFinite,
-      child: Card(
-        color: Color.fromRGBO(22, 70, 82, 1),
-        elevation: 5,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                child: Icon(
-                  icon,
-                  size: 50,
-                  color: Colors.white54,
+    return GestureDetector(
+      onLongPress: (){
+
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+        height: 120,
+        width: double.maxFinite,
+        child: Card(
+          color: Color.fromRGBO(22, 70, 82, 1),
+          elevation: 5,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Icon(
+                    icon,
+                    size: 50,
+                    color: Colors.white54,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Center(
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: Center(
+                                child: Text(
+                                  receipt.title,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
                               child: Text(
-                                receipt.title,
+                                dtFormat.format(receipt.dateOfReceipt),
                                 style: TextStyle(
                                   color: Colors.white70,
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              dtFormat.format(receipt.dateOfReceipt),
-                              style: TextStyle(
-                                color: Colors.white70,
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                receipt.description,
+                                overflow: TextOverflow.fade,
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              receipt.description,
-                              overflow: TextOverflow.fade,
-                              style: TextStyle(
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

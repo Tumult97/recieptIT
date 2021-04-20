@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:path/path.dart';
 import 'package:reciept_it/storage/models/receipt.dart';
 import 'package:reciept_it/storage/types/receipttype.dart';
@@ -6,39 +7,39 @@ import 'dart:async';
 
 
 class Connection{
-  static Database db;
+  static Future<Database> db;
 
   static void initDb() async{
     
-    await deleteDatabase(join(await getDatabasesPath(), "database.db"));
-    db = await openDatabase(
+    //await deleteDatabase(join(await getDatabasesPath(), "database.db"));
+    db = openDatabase(
       join(await getDatabasesPath(), "database.db"),
       version: 1,
       onCreate: (db, version){
-        var sql = "CREATE TABLE receipts (id INTEGER PRIMARY KEY, title TEXT, description TEXT, dateAdded TEXT, dateModified TEXT, dateOfReceipt TEXT, amount REAL, comments TEXT, fileId INTEGER, type TEXT)";
+        var sql = "CREATE TABLE receipts (id INTEGER PRIMARY KEY, title TEXT, description TEXT, dateAdded TEXT, dateModified TEXT, dateOfReceipt TEXT, amount REAL, comments TEXT)";
         db.execute(sql);
 
-        //sql = "ALTER TABLE receipts ADD COLUMN type TEXT";
-
-        sql = "CREATE TABLE files (id INTEGER PRIMARY KEY, bytes BLOB, dateAdded DATETIME, fileName DATETIME)";
+        sql = "ALTER TABLE receipts ADD COLUMN type TEXT";
         db.execute(sql);
+
+
 
         //return;
       }
     );
 
-    Connection.insertReceipt(Receipt(
-      id: 1,
-      title: "Title 1",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
-      dateAdded: DateTime.now(),
-      dateModified: DateTime.now(),
-      dateOfReceipt: DateTime.now(),
-      amount: 243.79,
-      comments: "Pick n' Pay",
-      type: ReceiptType.grocery,
-    ));
-    // Connection.insertReceipt(Receipt(
+    // await Connection.insertReceipt(Receipt(
+    //   id: 1,
+    //   title: "Title 1",
+    //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
+    //   dateAdded: DateTime.now(),
+    //   dateModified: DateTime.now(),
+    //   dateOfReceipt: DateTime.now(),
+    //   amount: 243.79,
+    //   comments: "Pick n' Pay",
+    //   type: ReceiptType.grocery,
+    // ));
+    // await Connection.insertReceipt(Receipt(
     //   id: 1,
     //   title: "Title 2",
     //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
@@ -51,7 +52,7 @@ class Connection{
     //   comments: "Sasol",
     //   type: ReceiptType.petrol,
     // ));
-    // Connection.insertReceipt(Receipt(
+    // await Connection.insertReceipt(Receipt(
     //   id: 1,
     //   title: "Title 3",
     //   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet consectetur. Netus et malesuada fames ac turpis egestas sed tempus urna. Dictum fusce ut placerat orci nulla pellentesque dignissim enim sit. A lacus vestibulum sed arcu.",
@@ -71,9 +72,9 @@ class Connection{
 
   //insert Receipt
   static Future<void> insertReceipt(Receipt item) async{
-    Database database = db;
+    Database database = await db;
 
-    database.insert(
+    await database.insert(
       'receipts',
       item.toMap()
     );
@@ -83,21 +84,13 @@ class Connection{
   static Future<List<Receipt>> listReceipt() async{
     final database = await db;
 
-    final List<Map<String, dynamic>> maps = await database.query('receipts');
+    final List<Map<String, dynamic>> maps = await database.query("receipts");
 
-    return List.generate(maps.length, (i) {
-      return Receipt(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        description: maps[i]['description'],
-        dateAdded: DateTime.parse(maps[i]['dateAdded']),
-        dateModified: DateTime.parse(maps[i]['dateModified']),
-        dateOfReceipt: DateTime.parse(maps[i]['dateOfReceipt']),
-        amount: maps[i]['amount'],
-        comments: maps[i]['comments'],
-        fileId: maps[i]['fileId'],
-      );
+    var list = List.generate(maps.length, (i) {
+      return Receipt.fromMap(maps[i]);
     });
+
+    return list;
   }
 
   //update Receipt
@@ -136,17 +129,7 @@ class Connection{
       return null;
 
     var map = maps.first;
-    return Receipt(
-      id: map['id'],
-      title: map['title'],
-      description: map['description'],
-      dateAdded: map['dateAdded'],
-      dateModified: map['dateModified'],
-      dateOfReceipt: map['dateOfReceipt'],
-      amount: map['amount'],
-      comments: map['comments'],
-      fileId: map['fileId'],
-    );
+    return Receipt.fromMap(map);
   }
 
   //endregion

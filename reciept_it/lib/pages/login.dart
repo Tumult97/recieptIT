@@ -13,13 +13,15 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    //Connection.OpenDatabase();
+
+    Connection.initDb();
+
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topRight,
-              colors: [Color.fromRGBO(11, 35, 41, 1), Color.fromRGBO(22, 70, 82, 1)],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topRight,
+              colors: [Color.fromRGBO(11, 35, 41, 1), Color.fromRGBO(22, 70, 82, 1)]
           )
       ),
       child: Scaffold(
